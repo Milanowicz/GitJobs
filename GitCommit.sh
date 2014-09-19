@@ -28,7 +28,9 @@ done < local.conf
 ls ${CommitPath} > /dev/null 2> /dev/null
 if [ $? != 0 ]; then
     mkdir ${CommitPath} > /dev/null
-    exit 1
+    if [ $? != 0 ]; then
+        exit 1
+    fi
 fi
 
 rm ${CommitPath}"/*" > /dev/null 2> /dev/null

@@ -30,7 +30,9 @@ InfoFile=${InfoDir}"/"${ServerName}"_GitGarbageCollection_"${Time}".txt"
 ls ${InfoDir} > /dev/null 2> /dev/null
 if [ $? != 0 ]; then
     mkdir ${InfoDir} > /dev/null
-    exit 1
+    if [ $? != 0 ]; then
+        exit 1
+    fi
 fi
 
 echo -e "\n\nGit Directory" >> ${InfoFile}
