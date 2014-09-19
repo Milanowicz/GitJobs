@@ -21,35 +21,42 @@ while read Line; do
     export ${Var[0]}=${Var[1]}
 done < local.conf
 
-Subject="Git Repository Report from "${ServerName}
-InfoFile=${InfoDir}"/"${ServerName}"_GitStats_"${Time}".txt"
+Subject="Git Repository Report from ${ServerName}"
+InfoFile=${InfoDir}"/${ServerName}_GitStats_${Time}.txt"
 
 
-# Verzeichnis pruefen
-ls ${InfoDir} > /dev/null 2> /dev/null
-if [ $? != 0 ]; then
-    mkdir ${InfoDir} > /dev/null
-    if [ $? != 0 ]; then
-        exit 1
-    fi
-fi
-
-
-echo "###########################################################" >> ${InfoFile}
-echo "                 Repository Report from ${ServerName}" >> ${InfoFile}
-echo "###########################################################" >> ${InfoFile}
-
-# Git
+# Check if git repository directory exists
 ls ${RepoPath} > /dev/null 2> /dev/null
 
 if [ $? == 0 ]; then
-    echo -e "\n\nGit Directory" >> ${InfoFile}
-    du -h --max-depth 1 ${RepoPath} >> ${InfoFile} 2>> ${InfoFile}
+
+    # Check if dokumentation directory exists
+    ls ${InfoDir} > /dev/null 2> /dev/null
+    if [ $? != 0 ]; then
+        mkdir ${InfoDir} > /dev/null
+        if [ $? != 0 ]; then
+            exit 1
+        fi
+    fi
+
+
+    echo "###########################################################" >> ${InfoFile}
+    echo "                 Repository Report from ${ServerName}" >> ${InfoFile}
+    echo "###########################################################" >> ${InfoFile}
+
+
+    echo -e "\n\nGit Directory:" >> ${InfoFile}
+
+    find $1 -name '*.git' | while read Repo; do
+
+        du -h --max-depth 0 ${RepoPath} >> ${InfoFile} 2>> ${InfoFile}
+
+    done
+
+    #  Delete old files
+    find ${InfoDir} -mtime +30 -exec rm {} \;
+
+    # EMail versenden von den Sachen die passiert sind
+    mail -s "$Subject" ${Receiver} < ${InfoFile}
+
 fi
-
-
-#  Delete old files
-find ${InfoDir} -mtime +30 -exec rm {} \;
-
-# EMail versenden von den Sachen die passiert sind
-mail -s "$Subject" ${Receiver} < ${InfoFile}
