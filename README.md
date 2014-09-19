@@ -1,5 +1,7 @@
 # Git Cron Jobs BASH Shell Scripts
 
+Automatic git taks for cron.
+
 ## Settings
 
 $ nano local.conf
