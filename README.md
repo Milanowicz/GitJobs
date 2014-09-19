@@ -2,15 +2,13 @@
 
 ## Settings
 
-/home/git/local.conf
+$ nano local.conf
 
     CommitPath="/path/Commits"
     InfoDir="/path/.info"
     ServerName="Hostname"
     RepoPath=/home/git/repositories/
     Receiver="eMail"
-    Log=/var/log/git.log
-    Error=/var/log/giterror.log
     ! One empty row only at the end of this file !
 
 
@@ -18,7 +16,7 @@
 
 ### GitCommit.sh
 
-Get a overview from all commits from every repostory that are hosted on the server.
+Get a overview from all commits from every repository that are hosted on the server.
 
 
 ### GitGarbageCollection.sh
